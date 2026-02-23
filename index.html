@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MemoryWell • cognitive care for seniors</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="overlay">
+  <div class="container">
+
+    <!-- HEADER with single Sign up button -->
+    <header>
+      <div class="logo">🧠 Recall <span>for elder </span></div>
+      <div class="nav-buttons">
+        <button class="pricing-btn" id="pricingNavBtn">Pricing</button>
+        <button class="signup-btn" id="showSignupBtn">Sign up</button>
+      </div>
+    </header>
+
+    <!-- PUBLIC SECTION (before login) -->
+    <div id="publicView">
+      <section class="public-section">
+        <h1>Caring for memory — simple and warm</h1>
+        <p class="lead">MemoryWell is a platform for memory training and support for older adults, including those with dementia. Simple exercises, family memories, clear interface, no ads.</p>
+      </section>
+
+      <section class="public-section">
+        <h2>🌟 What awaits you</h2>
+        <div class="features-grid">
+          <div class="feature-card"><span class="emoji">🧩</span> Memory games</div>
+          <div class="feature-card"><span class="emoji">📸</span> Personal memories</div>
+          <div class="feature-card"><span class="emoji">🧘</span> Attention & logic</div>
+          <div class="feature-card"><span class="emoji">📊</span> Progress for family</div>
+        </div>
+      </section>
+
+      <section class="public-section" id="pricingSection">
+        <h2>💎 Choose your plan</h2>
+        <div class="pricing-grid">
+          <div class="plan-card"><h3>Basic</h3><div class="price">$0 <small>/month</small></div><ul><li>✔ 5 exercises</li><li>✔ 3 photos</li></ul></div>
+          <div class="plan-card premium"><h3>Premium</h3><div class="price">$9.99 <small>/month</small></div><ul><li>✔ All exercises</li><li>✔ Unlimited photos</li><li>✔ Progress reports</li></ul></div>
+          <div class="plan-card"><h3>For centers</h3><div class="price">☎️ Contact</div><ul><li>Corporate access</li></ul></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- MEMBER AREA (after login) -->
+    <div id="memberView" class="member-area">
+      <div class="welcome-bar">
+        <span>👤 Logged in as <strong id="loggedInRole">Patient</strong> (<span id="loggedInName">User</span>)</span>
+        <button class="logout-btn" id="logoutBtn">🚪 Log out</button>
+      </div>
+
+      <!-- Dynamic menu based on role (filled by JS) -->
+      <div class="member-menu" id="memberMenu"></div>
+
+      <!-- ========== PATIENT PANELS ========== -->
+      <div id="exercisePanel" class="exercise-dashboard">
+        <h2 style="font-size: 3rem;">🏋️ Exercises Dashboard</h2>
+        <div id="patientExerciseList" class="exercise-list"></div>
+        <div id="exerciseVideoPlayer" class="exercise-video-player" style="display: none;">
+          <h3 id="currentExerciseTitle" style="font-size: 2.5rem; margin-bottom: 20px;"></h3>
+          <video id="exerciseVideoElement" controls style="width:100%; max-height:400px; background:#2c5a68; border-radius:70px;"></video>
+          <p id="currentVideoFilename" style="font-size: 2rem; margin-top: 10px; text-align:center;"></p>
+          <div id="videoNavControls" style="display: none;" class="video-controls">
+            <button id="prevExerciseVideoBtn">◀ Previous</button>
+            <span id="exerciseVideoCounter" style="font-size: 2.5rem; margin: 0 20px;"></span>
+            <button id="nextExerciseVideoBtn">Next ▶</button>
+          </div>
+          <button id="backToExercisesBtn" style="font-size: 2rem; padding: 15px 40px; margin-top: 30px; background: #f4b456; border: none; border-radius: 60px; box-shadow: 0 6px 0 #b87d2e; cursor: pointer;">← Back to Exercises</button>
+        </div>
+      </div>
+
+      <!-- MEMORIES PANEL – now dynamic -->
+      <div id="memoriesPanel" class="memories-panel">
+        <h2 style="font-size: 3rem;">📖 Your warm moments</h2>
+        <!-- Container for memory cards -->
+        <div id="memoriesContainer" class="memories-grid" style="min-height: 100px;"></div>
+        <!-- Add button (always visible) -->
+        <button id="addMemoryBtn" style="font-size: 2rem; padding: 15px 40px; background: #f4b456; border: none; border-radius: 60px; box-shadow: 0 6px 0 #b87d2e; cursor: pointer; display: block; margin: 30px auto 0;">✨ Add your photos and dates.</button>
+      </div>
+
+      <!-- ========== DOCTOR PANELS ========== -->
+      <div id="doctorDashboardPanel" class="doctor-dashboard">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+          <h2 style="font-size: 3rem;">👨‍⚕️ Doctor Dashboard</h2>
+          <button id="postNewExerciseBtn" style="font-size: 2rem; padding: 15px 30px; background: #f4b456; border: none; border-radius: 60px; box-shadow: 0 6px 0 #b87d2e; font-weight: 600;">➕ Post New Exercise</button>
+        </div>
+
+        <div id="postExerciseForm" style="display: none; background: white; border-radius: 60px; padding: 30px; margin-bottom: 40px;">
+          <h3 style="font-size: 2.5rem; margin-bottom: 20px;">Create New Exercise</h3>
+          
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 2rem; display: block; margin-bottom: 5px;">Exercise Name</label>
+            <input type="text" placeholder="e.g., Morning Stretch" id="exerciseName" style="width: 100%; font-size: 1.8rem; padding: 15px; border-radius: 40px; border: 3px solid #cbe7f0;">
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 2rem; display: block; margin-bottom: 5px;">Description</label>
+            <textarea placeholder="Describe the exercise..." id="exerciseDesc" rows="3" style="width: 100%; font-size: 1.8rem; padding: 15px; border-radius: 40px; border: 3px solid #cbe7f0;"></textarea>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 2rem; display: block; margin-bottom: 5px;">Doctor's Name</label>
+            <input type="text" id="doctorName" placeholder="Doctor's name" readonly style="width: 100%; font-size: 1.8rem; padding: 15px; border-radius: 40px; border: 3px solid #cbe7f0; background: #f0f0f0;">
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 2rem; display: block; margin-bottom: 5px;">Upload Videos (can select multiple)</label>
+            <input type="file" accept="video/*" id="videoUpload" multiple style="font-size: 1.8rem; padding: 10px;">
+            <small style="font-size: 1.4rem;">Hold Ctrl/Cmd to select multiple files.</small>
+          </div>
+
+          <div style="display: flex; gap: 20px; margin-top: 30px;">
+            <button id="saveExerciseBtn" style="font-size: 2rem; padding: 15px 40px; background: #1f6c7a; color: white; border: none; border-radius: 60px; box-shadow: 0 6px 0 #0a3942;">Save Exercise</button>
+            <button id="cancelPostBtn" style="font-size: 2rem; padding: 15px 40px; background: #a5b9c0; color: white; border: none; border-radius: 60px; box-shadow: 0 6px 0 #6d7f86;">Cancel</button>
+          </div>
+        </div>
+
+        <div id="exerciseList" style="margin-top: 30px;">
+          <h3 style="font-size: 2.5rem; margin-bottom: 20px;">Your Exercises</h3>
+          <div id="exerciseContainer">
+            <p style="font-size: 2rem; text-align: center; color: #777;">No exercises posted yet. Click "Post New Exercise" to create one.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="doctorFeedbacksPanel" class="feedbacks-panel">
+        <h2 style="font-size: 3rem;">💬 Patient Feedback</h2>
+        <div id="feedbackContainer" style="margin-top: 20px;">
+          <p style="font-size: 2rem; text-align: center; color: #777;">No feedback yet.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <footer>
+      <p>© MemoryWell — caring for loved ones. 2026 · Contact: memory@well.com</p>
+      <p style="margin-top:15px;">✨ To change background, edit style.css line 5 (background).</p>
+    </footer>
+  </div> <!-- container -->
+</div> <!-- overlay -->
+
+<!-- MODAL for adding memories -->
+<div id="memoryModal" class="modal">
+  <div class="modal-content" style="max-width: 600px;">
+    <h3 style="font-size: 2.5rem; margin-bottom: 20px;">Add a Memory</h3>
+    
+    <input type="text" id="memoryTitle" placeholder="Title (e.g., Birthday)" style="width: 100%; font-size: 1.8rem; padding: 15px; border-radius: 60px; border: 3px solid #cbe7f0; margin-bottom: 20px;">
+    
+    <input type="date" id="memoryDate" placeholder="Date" style="width: 100%; font-size: 1.8rem; padding: 15px; border-radius: 60px; border: 3px solid #cbe7f0; margin-bottom: 20px;">
+    
+    <textarea id="memoryDescription" placeholder="Description (e.g., 85th birthday party)" rows="3" style="width: 100%; font-size: 1.8rem; padding: 15px; border-radius: 60px; border: 3px solid #cbe7f0; margin-bottom: 20px;"></textarea>
+    
+    <label style="font-size: 2rem; display: block; margin-bottom: 10px;">Upload Photos (optional)</label>
+    <input type="file" id="memoryImages" accept="image/*" multiple style="font-size: 1.8rem; padding: 10px; margin-bottom: 20px;">
+    <small style="font-size: 1.4rem; display: block; margin-bottom: 20px;">You can select multiple images.</small>
+
+    <div style="display: flex; gap: 20px;">
+      <button id="saveMemoryBtn" class="modal-action-btn" style="font-size: 2rem; padding: 15px 40px; background: #1f6c7a; color: white; border: none; border-radius: 60px; box-shadow: 0 6px 0 #0a3942;">Save Memory</button>
+      <button id="cancelMemoryBtn" class="modal-cancel-btn" style="font-size: 2rem; padding: 15px 40px; background: #a5b9c0; color: white; border: none; border-radius: 60px; box-shadow: 0 6px 0 #6d7f86;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL WINDOW for LOGIN / SIGNUP (unchanged) -->
+<div id="authModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-tabs">
+      <button class="tab-btn active" id="loginTab">Log in</button>
+      <button class="tab-btn" id="signupTab">Sign up</button>
+    </div>
+
+    <div id="loginForm" class="tab-form active">
+      <h3>Welcome back</h3>
+      <input type="email" placeholder="Email" id="loginEmail" value="doctor@example.com">
+      <input type="password" placeholder="Password" id="loginPassword" value="123456">
+      <button class="modal-action-btn" id="loginActionBtn">Log in</button>
+    </div>
+
+    <div id="signupForm" class="tab-form">
+      <h3>Join MemoryWell today</h3>
+      <input type="text" placeholder="Full Name" id="fullName" value="">
+      <input type="email" placeholder="Email" id="email" value="">
+      <input type="tel" placeholder="Phone" id="phone" value="">
+      <input type="date" id="dob" placeholder="Date of Birth" style="width: 100%; font-size: 1.8rem; padding: 15px; border-radius: 60px; border: 3px solid #cbe7f0; margin-bottom: 20px;">
+      
+      <select id="countrySelect">
+        <option value="" disabled selected>Select Country</option>
+        <option value="us">United States</option>
+        <option value="ca">Canada</option>
+        <option value="uk">United Kingdom</option>
+        <option value="kz">Kazakhstan</option>
+      </select>
+
+      <select id="citySelect">
+        <option value="" disabled selected>Select City</option>
+      </select>
+
+      <div class="radio-group">
+        <p>I want to</p>
+        <label><input type="radio" name="role" value="patient" checked> Patient</label>
+        <label><input type="radio" name="role" value="doctor"> Doctor</label>
+      </div>
+
+      <button class="modal-action-btn" id="signupActionBtn">Create Account</button>
+    </div>
+
+    <button class="modal-cancel-btn" id="modalCancelBtn">Cancel</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
